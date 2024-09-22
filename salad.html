@@ -1,30 +1,42 @@
-<!DOCTYPE html><html><meta charset="UTF-8"><body>
-<body style="padding: 2cm; font-family: Helvetica, sans-serif;">
-    <h1>web socket demo</h1>
+<!DOCTYPE html><html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<body style="padding: 1cm; font-family: Helvetica, sans-serif; background-color: rgb(251, 194, 194);">
+    <h1 id="myH1">web socket demo</h1>
     <p>use the commander page to steer all open salad pages</p>
-    <div style="height: 500px; width: 500px;">
-        <p id="saladimg" style="font-size: 48pt; position: relative; 
-            top: 100px; left: 100px;" >	&#x1F96C; </p>
+    <div id="myDiv" style="height: 100vh; min-width: 180px; outline-style: dotted;">
+        <p id="saladEmoji" style="max-width: 50px; max-height: 50px; font-size: 50px; position: relative; 
+            top: 10px; left: 10px; outline-style: dashed;">	&#x1F96C; </p>
     </div>
 </body></html> 
 
 <script>
-    var array = [10, 10];
+    let div = document.getElementById("myDiv");
+    let dim = Math.floor(Math.min(
+        parseFloat(window.getComputedStyle(div).width), 
+        parseFloat(window.getComputedStyle(div).height)
+    ));
+    div.style.height = dim + "px";
+    // div.style.width  = dim + "px";
+    console.log(div.style.height, div.style.width, dim, window.getComputedStyle(div).width);
+
+
+    var posXY = [0.3, 0.3];
     var socket_open = false;
 
     echosocket = new WebSocket("wss://salad-commander.onrender.com");
 
     echosocket.onopen    = (() => socket_open = true);
-    echosocket.onmessage = (msg => array = JSON.parse(msg.data));
+    // echosocket.onmessage = (msg => posXY = JSON.parse(msg.data));
 
     function main() {
 
-        let img = document.getElementById("saladimg");
-        img.style.top = (25 * array[0]) + "px";
-        img.style.left = (25 * array[1]) + "px";
+        let salad = document.getElementById("saladEmoji");
+        salad.style.top  = (posXY[0] * 85) + "%";
+        salad.style.left = (posXY[1] * 85) + "%";
 
         if (socket_open) {echosocket.send("client")}
-        console.log("array = ", array);
+        console.log("posXY = ", posXY);
     }
-    setInterval(main, 20);
+    setInterval(main, 1000);
 </script>
