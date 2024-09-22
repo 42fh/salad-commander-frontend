@@ -27,7 +27,7 @@
     echosocket = new WebSocket("wss://salad-commander.onrender.com");
 
     echosocket.onopen    = (() => socket_open = true);
-    // echosocket.onmessage = (msg => posXY = JSON.parse(msg.data));
+    echosocket.onmessage = (msg => posXY = JSON.parse(msg.data));
 
     function main() {
 
@@ -38,5 +38,5 @@
         if (socket_open) {echosocket.send("client")}
         console.log("posXY = ", posXY);
     }
-    setInterval(main, 1000);
+    setInterval(main, 20);
 </script>
